@@ -1,0 +1,124 @@
+%{
+#include <stdio.h>
+%}
+
+%option noyywrap
+
+%%
+" "                   /* ignore whitespace */
+[\n\t]                /* ignore newline and tab */
+\.                    { printf("Punctuation: .\n"); }
+,                     { printf("Punctuation: ,\n"); }
+[.!?]                 { printf("Punctuation: %s\n", yytext); }
+[a-zA-Z]+\'[sS]       { printf("Possessive Pronoun: %s\n", yytext); }
+[a-zA-Z]+n't         { printf("Negation: %s\n", yytext); }
+[a-zA-Z]+ly          { printf("Adverb: %s\n", yytext); }
+[a-zA-Z]+ing         { printf("Gerund: %s\n", yytext); }
+[a-zA-Z]+er          { printf("Comparative Adjective: %s\n", yytext); }
+[a-zA-Z]+est         { printf("Superlative Adjective: %s\n", yytext); }
+[a-zA-Z]+            { printf("Noun/Verb/Adjective: %s\n", yytext); }
+%%
+
+int main() {
+    yylex();
+    return 0;
+}
+
+
+
+
+
+%{
+	/*This is a lex program for recognizing parts of speech*/
+%}
+
+%%
+[\t]+	;
+
+book |
+student |
+table { printf("%s is a noun\n",yytext); }
+
+a |
+an |
+the | { printf("%s is an article\n",yytext);}
+
+above | 
+across | 
+against
+along |
+among | 
+around | 
+at | 
+before |
+behind |
+below |
+beneath |
+beside |
+between |
+by |
+down | 
+from | 
+in |
+into |
+near |
+of |
+off |
+on |
+to |
+toward |
+under |
+upon |
+with | 
+within {printf("%s is a preposition\n",yytext);}
+
+he |
+she |
+her |
+his |
+him |
+it |
+they |
+I |
+you |
+us |
+this |
+them {printf("%s is a pronoun\n",yytext);}
+
+is |
+am | 
+are { printf("%s is a verb\n",yytext);}
+
+great |
+big |
+little |
+old |
+high |
+right |
+important |
+other |
+long |
+new |
+early |
+happy {printf("%s is an adjective\n",yytext);}
+
+slowly |
+now |
+never |
+rarely |
+also |
+always |
+even |
+here |
+quickly {printf("%s is an adverb\n",yytext);}
+
+[a-zA-Z]+ { printf("%s is an invalid token\n",yytext);}
+%%
+
+int yywrap(void){
+	return 1;
+}
+int main(){
+	yylex();	
+	yywrap();
+}

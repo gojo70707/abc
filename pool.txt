@@ -1,0 +1,68 @@
+import java.util.*;
+
+class PoolTableGenerator{
+    public static void main(String [] args){
+        String[] sourceCode = {
+            "START 100",
+            "READ A",
+            "LTORG",
+            "MOVER AREG, ='1'",
+            "MOVER AREG, ='2'",
+            "MOVEM AREG, B",
+            "MOVER BREG, ='6'",
+            "ADD AREG, BREG",
+            "COMP AREG, A",
+            "BC GT, LAST",
+            "LTORG",
+            "NEXT SUB AREG, ='1'",
+            "MOVER CREG, B",
+            "LTORG",
+            "ADD CREG, ='8'",
+            "MOVEM CREG, B",
+            "PRINT B",
+            "LAST STOP",
+            "A DS 1",
+            "B DS 1",
+            "END"
+        };
+
+
+        ArrayList<Integer> poolTable= new ArrayList<>();
+        // poolTable.add(1);
+        int count=0;
+        boolean flag=false;
+
+        for(String line : sourceCode){
+            String[] tokens = line.split("\\s+");
+
+            for(String token : tokens){
+                if(token.startsWith("='") && token.endsWith("'")){
+                    // String literal = token.substring(2,token.length()-1);
+                    if(count==0 && poolTable.isEmpty()){
+                        poolTable.add(1);
+                    } 
+                    
+                    if(flag ==true){
+                        poolTable.add(count+1);
+                        flag=false;
+                    }
+                    count++;
+                    // System.out.println(count);s
+                }
+
+                else if(token.equals("LTORG") && !poolTable.isEmpty()){
+                    // System.out.println("Flag set true");
+                    flag=true;
+                }
+
+            }
+        }
+
+        System.out.println("Pool Table : \n");
+        System.out.println("count");
+        for(Integer literal : poolTable){
+            System.out.print(literal+"\n");
+        }
+
+    }
+}

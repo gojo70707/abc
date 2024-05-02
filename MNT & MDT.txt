@@ -1,0 +1,65 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class MacroProcessor_2{
+    
+    public static void main(String[] args) {
+        List<String> sourceCode = new ArrayList<>();
+        sourceCode.add("LOAD A");
+        sourceCode.add("STORE B");
+        sourceCode.add("MACRO ABC");
+        sourceCode.add("LOAD p");
+        sourceCode.add("SUB q");
+        sourceCode.add("MEND");
+        sourceCode.add("MACRO ADD1 ARG");
+        sourceCode.add("LOAD X");
+        sourceCode.add("STORE ARG");
+        sourceCode.add("MEND");
+        // ... Continued ...
+        sourceCode.add("MACRO ADD5 A1, A2, A3");
+        sourceCode.add("STORE A2");
+        sourceCode.add("ADD1 5");
+        sourceCode.add("ADD1 10");
+        sourceCode.add("LOAD A1");
+        sourceCode.add("LOAD A3");
+        sourceCode.add("MEND");
+        sourceCode.add("ABC");
+        sourceCode.add("ADD5 D1, D2, D3");
+        sourceCode.add("END");
+        
+        HashMap<String, String> macroDefinitionTable = new HashMap<>();
+        HashMap<String, String> macroNameTable = new HashMap<>();
+        
+        String currentMacroName = "";
+        StringBuilder currentMacroDefinition = new StringBuilder();
+        
+        for (String line : sourceCode) {
+            if (line.startsWith("MACRO")) {
+                currentMacroName = line.split("\\s+")[1];
+                currentMacroDefinition.setLength(0);
+            } else if (line.equals("MEND")) {
+                macroDefinitionTable.put(currentMacroName, currentMacroDefinition.toString());
+                macroNameTable.put(currentMacroName, "");
+                currentMacroName = "";
+            } else if (!currentMacroName.isEmpty()) {
+                currentMacroDefinition.append(line).append("\n");
+            }
+        }
+        
+        // Print MDT
+        System.out.println("Macro Definition Table (MDT):");
+        for (String macroName : macroDefinitionTable.keySet()) {
+            String macroDefinition = macroDefinitionTable.get(macroName);
+            System.out.println(macroName + ":");
+            System.out.println(macroDefinition);
+            System.out.println();
+        }
+        
+        // Print MNT
+        System.out.println("Macro Name Table (MNT):");
+        for (String macroName : macroNameTable.keySet()) {
+            System.out.println(macroName);
+        }
+    }
+}

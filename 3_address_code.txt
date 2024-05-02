@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Structure to represent an instruction in three-address code
+typedef struct {
+    char result[10];  // Result variable
+    char op[2];       // Operator
+    char arg1[10];    // First operand
+    char arg2[10];    // Second operand
+} ThreeAddress;
+
+int main() {
+    char input[100];
+    printf("Enter the expression: ");
+    fgets(input, sizeof(input), stdin);
+
+    // Removing trailing newline character if present
+    input[strcspn(input, "\n")] = '\0';
+
+    // Initializing variables to store operands and operator
+    char var[10], op1[2], op2[2], arg1[10], arg2[10];
+    sscanf(input, "%s = %s %s %s %s %s", var, arg1, op1, arg2, op2, arg2);
+
+    // Creating an array to store three-address instructions
+    ThreeAddress instructions[5];
+
+    // Generating three-address code
+    strcpy(instructions[0].result, "t1");
+    strcpy(instructions[0].op, "*");
+    strcpy(instructions[0].arg1, arg1);
+    strcpy(instructions[0].arg2, arg1);
+
+    strcpy(instructions[1].result, "t2");
+    strcpy(instructions[1].op, "*");
+    strcpy(instructions[1].arg1, arg1);
+    strcpy(instructions[1].arg2, arg2);
+
+    strcpy(instructions[2].result, "t3");
+    strcpy(instructions[2].op, "*");
+    strcpy(instructions[2].arg1, arg2);
+    strcpy(instructions[2].arg2, arg2);
+
+    strcpy(instructions[3].result, "t4");
+    strcpy(instructions[3].op, "-");
+    strcpy(instructions[3].arg1, "t1");
+    strcpy(instructions[3].arg2, "t2");
+
+    strcpy(instructions[4].result, var);
+    strcpy(instructions[4].op, "+");
+    strcpy(instructions[4].arg1, "t3");
+    strcpy(instructions[4].arg2, "t4");
+
+    // Printing the generated three-address code
+    printf("Generated three-address code:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%s = %s %s %s\n", instructions[i].result, instructions[i].arg1,
+               instructions[i].op, instructions[i].arg2);
+    }
+
+    return 0;
+}
